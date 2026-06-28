@@ -1,0 +1,68 @@
+/* ==================== Alice 企鹅看板娘 ==================== */
+
+#schierke-companion {
+  position: fixed;
+  bottom: -10px;
+  right: 20px;
+  z-index: 998;
+  width: 160px;
+  pointer-events: none;
+  user-select: none;
+  animation: schierke-float 4s ease-in-out infinite;
+}
+
+#schierke-companion .schierke-img {
+  width: 100%;
+  display: block;
+  pointer-events: auto;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 20px rgba(126, 87, 194, 0.35));
+}
+
+#schierke-companion .schierke-img:hover {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+#schierke-companion .schierke-emoji-fallback {
+  font-size: 110px;
+  display: block;
+  text-align: center;
+  pointer-events: auto;
+  line-height: 1;
+  filter: drop-shadow(0 6px 12px rgba(126, 87, 194, 0.35));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#schierke-companion .schierke-emoji-fallback:hover {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+@keyframes schierke-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+
+/* 移动端隐藏 */
+@media (max-width: 768px) {
+  #schierke-companion { display: none !important; }
+}
+
+/* ==================== Butterfly 右侧控件移到左下角 ==================== */
+
+#rightside {
+  left: -48px !important;
+  right: auto !important;
+}
+
+#rightside.rightside-show {
+  transform: translate(58px, 0) !important;
+}
+
+/* 隐藏配置按钮在收起时的内容时，方向也跟着反 */
+#rightside #rightside-config-hide {
+  transform: translate(-45px, 0);
+}
+#rightside #rightside-config-hide.show,
+#rightside #rightside-config-hide.status {
+  transform: translate(0, 0);
+}

@@ -1,0 +1,498 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>主流智能体框架（一） | Schierke的Blog</title><meta name="author" content="Schie2ke"><meta name="copyright" content="Schie2ke"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f3e5f5"><meta name="description" content="Microsoft Agent Framework  Microsoft Agent Framework，简称 MAF，不是凭空出现的。它主要继承了微软此前两条技术路线：  AutoGen：偏研究和多 Agent 协作，核心是“多个 Agent 通过消息对话完成复杂任务”。 Semantic Kernel：偏企业应用和生产工程，核心是“把 LLM、插件、函数、数据源、观测、安全治理接入应用”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主流智能体框架（一）">
+<meta property="og:url" content="https://schie2ke.github.io/2026/05/17/%E4%B8%BB%E6%B5%81%E6%99%BA%E8%83%BD%E4%BD%93%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Schierke的Blog">
+<meta property="og:description" content="Microsoft Agent Framework  Microsoft Agent Framework，简称 MAF，不是凭空出现的。它主要继承了微软此前两条技术路线：  AutoGen：偏研究和多 Agent 协作，核心是“多个 Agent 通过消息对话完成复杂任务”。 Semantic Kernel：偏企业应用和生产工程，核心是“把 LLM、插件、函数、数据源、观测、安全治理接入应用”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://schie2ke.github.io/img/Schierke.png">
+<meta property="article:published_time" content="2026-05-17T05:38:42.000Z">
+<meta property="article:modified_time" content="2026-05-18T06:26:52.000Z">
+<meta property="article:author" content="Schie2ke">
+<meta property="article:tag" content="AI agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://schie2ke.github.io/img/Schierke.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "主流智能体框架（一）",
+  "url": "https://schie2ke.github.io/2026/05/17/%E4%B8%BB%E6%B5%81%E6%99%BA%E8%83%BD%E4%BD%93%E6%A1%86%E6%9E%B6/",
+  "image": "https://schie2ke.github.io/img/Schierke.png",
+  "datePublished": "2026-05-17T05:38:42.000Z",
+  "dateModified": "2026-05-18T06:26:52.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Schie2ke",
+      "url": "https://Schie2ke.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://schie2ke.github.io/2026/05/17/%E4%B8%BB%E6%B5%81%E6%99%BA%E8%83%BD%E4%BD%93%E6%A1%86%E6%9E%B6/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1a0e2e')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f3e5f5')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.13.0',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '主流智能体框架（一）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/schierke.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Schierke.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Schierke的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">主流智能体框架（一）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">主流智能体框架（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-17T05:38:42.000Z" title="发表于 2026-05-17 13:38:42">2026-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-18T06:26:52.000Z" title="更新于 2026-05-18 14:26:52">2026-05-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI-agent/">AI agent</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="microsoft-agent-framework"><a class="markdownIt-Anchor" href="#microsoft-agent-framework"></a> Microsoft Agent Framework</h1>
+<hr />
+<p>Microsoft Agent Framework，简称 MAF，不是凭空出现的。它主要继承了微软此前两条技术路线：</p>
+<ol>
+<li>AutoGen：偏研究和多 Agent 协作，核心是“多个 Agent 通过消息对话完成复杂任务”。</li>
+<li>Semantic Kernel：偏企业应用和生产工程，核心是“把 LLM、插件、函数、数据源、观测、安全治理接入应用”。</li>
+</ol>
+<p>MAF 可以理解为这两条路线的合流：把 AutoGen 的多 Agent 编排能力，和 Semantic Kernel 的企业级工具、状态、类型、安全、观测能力整合到一个统一框架里。</p>
+<h2 id="autogen"><a class="markdownIt-Anchor" href="#autogen"></a> AutoGen</h2>
+<p>AutoGen 是微软研究院推出的多 Agent 框架。它的核心思想很直接：复杂任务不一定由一个 Agent 独自完成，可以由多个角色不同的 Agent 通过对话协作完成。</p>
+<p>比如一个“写研究报告”的任务，可以拆成：</p>
+<ul>
+<li>Research Agent：负责搜索和收集资料</li>
+<li>Analyst Agent：负责分析和归纳</li>
+<li>Writer Agent：负责写作</li>
+<li>Reviewer Agent：负责检查事实和格式</li>
+<li>User Proxy Agent：代表人类参与确认或提供额外信息</li>
+</ul>
+<p>这和传统程序不同。传统程序是你提前写好流程：</p>
+<p>step1 -&gt; step2 -&gt; step3 -&gt; output</p>
+<p>AutoGen 更像一个“多人会议”：</p>
+<p>用户提出目标<br />
+研究员 Agent 发言<br />
+分析师 Agent 接话<br />
+写作者 Agent 起草<br />
+审阅者 Agent 提修改意见<br />
+必要时请求人类确认<br />
+最终形成答案</p>
+<h3 id="autogen-的底层原理消息驱动的多-agent-系统"><a class="markdownIt-Anchor" href="#autogen-的底层原理消息驱动的多-agent-系统"></a> AutoGen 的底层原理：消息驱动的多 Agent 系统</h3>
+<p>AutoGen 的关键不是“调用很多模型”，而是它把 Agent 抽象成可以收发消息的计算单元。</p>
+<p>一个 Agent 通常包含三类能力：</p>
+<ol>
+<li>接收消息：来自用户、其他 Agent、工具结果或系统事件。</li>
+<li>处理消息：调用 LLM、执行工具、套用规则、请求人类输入。</li>
+<li>发送消息：把结果发给另一个 Agent 或发回给用户。</li>
+</ol>
+<p>底层执行逻辑可以简化成：</p>
+<p>Message -&gt; Agent receives -&gt; Agent thinks/acts -&gt; New Message -&gt; Next Agent</p>
+<p>AutoGen v0.4 之后更强调 actor model。Actor model 是一种并发编程模型，每个 actor 都是独立的执行单元，靠消息通信，不直接共享内部状态。用在 Agent 系统里，就是：</p>
+<ul>
+<li>每个 Agent 是一个 actor</li>
+<li>Agent 之间不直接调用彼此内部函数</li>
+<li>它们通过消息交换协作</li>
+<li>Runtime 负责消息分发、事件调度、并发执行</li>
+</ul>
+<p>这带来的好处是：Agent 可以异步运行，可以分布在不同进程甚至不同语言环境里，也更适合复杂多 Agent 系统。</p>
+<h3 id="autogen-的优势和局限"><a class="markdownIt-Anchor" href="#autogen-的优势和局限"></a> AutoGen 的优势和局限</h3>
+<p>AutoGen 的优势是灵活，特别适合研究和探索复杂 Agent 模式，比如：</p>
+<ul>
+<li>Group Chat：多个 Agent 群聊</li>
+<li>Debate：多个 Agent 辩论</li>
+<li>Reflection：一个 Agent 输出，另一个 Agent 反思修正</li>
+<li>Planner / Executor：一个 Agent 规划，另一个 Agent 执行</li>
+<li>Human-in-the-loop：人类中途介入</li>
+</ul>
+<p>但 AutoGen 早期更偏实验。真正进入生产环境时，开发者还会遇到很多工程问题：</p>
+<ul>
+<li>状态如何持久化？</li>
+<li>工具权限如何控制？</li>
+<li>失败任务如何恢复？</li>
+<li>调用链如何观测？</li>
+<li>如何接入企业身份、安全、审计、监控？</li>
+<li>如何和 Azure、Microsoft 365、企业 API 稳定集成？</li>
+</ul>
+<p>这正是 Semantic Kernel 擅长的部分。</p>
+<h2 id="semantic-kernel"><a class="markdownIt-Anchor" href="#semantic-kernel"></a> Semantic Kernel</h2>
+<p>Semantic Kernel，简称 SK，是微软较早推出的企业级 LLM 应用开发 SDK。它关注的问题不是“多个 Agent 怎么聊天”，而是：</p>
+<p>如何把 LLM 稳定地嵌入真实应用，让它能调用函数、访问数据、使用企业服务，并且可观测、可治理。</p>
+<p>SK 的核心对象叫 Kernel。</p>
+<p>可以把 Kernel 理解成一个“AI 应用运行容器”。它负责管理：</p>
+<ul>
+<li>模型服务，比如 Azure OpenAI、OpenAI</li>
+<li>插件，也就是可被模型调用的函数集合</li>
+<li>Prompt 模板</li>
+<li>Memory / Vector Store</li>
+<li>日志、过滤器、中间件、安全策略</li>
+<li>依赖注入服务</li>
+</ul>
+<p>官方文档对 Kernel 的解释很关键：它本质上是一个管理服务和插件的依赖注入容器。</p>
+<h3 id="semantic-kernel-的底层原理函数调用循环"><a class="markdownIt-Anchor" href="#semantic-kernel-的底层原理函数调用循环"></a> Semantic Kernel 的底层原理：函数调用循环</h3>
+<p>SK 最重要的机制是 function calling loop，也就是函数调用循环。</p>
+<p>假设你有一个灯光控制插件：</p>
+<pre><code>get_lights()
+change_state(light_id, is_on)
+</code></pre>
+<p>用户说：</p>
+<p>把所有灯切换一下状态</p>
+<p>LLM 并不会直接控制灯。真实过程是：</p>
+<ol>
+<li>Kernel 把用户问题、历史消息、可用函数 schema 发给模型</li>
+<li>模型判断：我需要先调用 get_lights()</li>
+<li>Kernel 解析模型返回的函数调用请求</li>
+<li>Kernel 在真实代码中执行 get_lights()</li>
+<li>Kernel 把工具结果返回给模型</li>
+<li>模型继续判断：需要调用 change_state(…)</li>
+<li>Kernel 再次执行函数</li>
+<li>模型看到最终结果，生成自然语言回复</li>
+</ol>
+<p>这就是 Agent 工具调用的核心机制。</p>
+<p>注意，这里所谓“模型会调用工具”，不是模型真的拥有权限。更准确地说：</p>
+<p>模型只是输出一个结构化的工具调用意图，框架负责校验、执行和返回结果。</p>
+<p>这点非常重要。Agent 的安全边界不在模型内部，而在框架和工具执行层。</p>
+<h3 id="plugin-function-tool-的关系"><a class="markdownIt-Anchor" href="#plugin-function-tool-的关系"></a> Plugin、Function、Tool 的关系</h3>
+<p>在 Semantic Kernel 里，常用词是 Plugin 和 Function。</p>
+<ul>
+<li>Plugin：一组相关函数的集合，例如 CalendarPlugin、EmailPlugin、DatabasePlugin。</li>
+<li>Function：插件里的一个具体能力，例如 send_email、query_sales。</li>
+<li>Tool：更通用的说法，其他框架通常把可调用函数都叫 Tool。</li>
+</ul>
+<p>可以这样理解：</p>
+<p>Plugin = 工具箱<br />
+Function = 工具箱里的某个工具<br />
+Tool = Agent 可调用能力的通用名称</p>
+<p>SK 的优势在于，它让企业开发者可以把已有代码、REST API、OpenAPI 服务、MCP Server 封装成插件，让 LLM 通过函数调用使用它们。</p>
+<h3 id="semantic-kernel-的工程价值"><a class="markdownIt-Anchor" href="#semantic-kernel-的工程价值"></a> Semantic Kernel 的工程价值</h3>
+<p>SK 比较强的地方是工程化：</p>
+<ul>
+<li>通过依赖注入管理服务</li>
+<li>通过插件封装企业 API</li>
+<li>通过 function calling 实现自动规划</li>
+<li>通过 Vector Store 做 RAG</li>
+<li>通过 Filters / Middleware 做拦截、审计、权限控制</li>
+<li>通过 Observability 做日志和追踪</li>
+<li>通过多语言 SDK 支持 .NET、Python、Java</li>
+</ul>
+<p>也就是说，SK 的核心思想不是“让 Agent 更会聊天”，而是：</p>
+<p>让 LLM 应用像正常企业软件一样被构建、测试、监控和治理。</p>
+<h2 id="为什么-autogen-和-semantic-kernel-需要结合"><a class="markdownIt-Anchor" href="#为什么-autogen-和-semantic-kernel-需要结合"></a> 为什么 AutoGen 和 Semantic Kernel 需要结合</h2>
+<p>AutoGen 和 Semantic Kernel 解决的是同一个大问题的不同侧面。</p>
+<p>AutoGen 擅长：</p>
+<p>多 Agent 协作<br />
+动态对话<br />
+复杂任务分工<br />
+研究型编排模式</p>
+<p>Semantic Kernel 擅长：</p>
+<p>工具接入<br />
+企业集成<br />
+函数调用<br />
+状态管理<br />
+安全治理<br />
+可观测性<br />
+生产稳定性</p>
+<p>如果只用 AutoGen，你可能很快做出一个多 Agent Demo，但生产化时要自己补很多基础设施。</p>
+<p>如果只用 Semantic Kernel，你可以很好地接工具和企业系统，但早期多 Agent 编排和复杂动态协作不是它最核心的表达方式。</p>
+<p>所以微软后来把两条路线收敛成 Microsoft Agent Framework。</p>
+<h2 id="maf"><a class="markdownIt-Anchor" href="#maf"></a> MAF</h2>
+<p>Microsoft Agent Framework 是微软新的统一 Agent 框架。官方定位是：用于构建、编排和部署生产级 AI Agent 与多 Agent Workflow 的开源、多语言框架，支持 Python 和 .NET。</p>
+<p>MAF 的设计可以概括成四个核心对象：</p>
+<p>Agent + Tool + Session + Workflow</p>
+<p>它不是简单把 AutoGen 和 SK 名字放在一起，而是重新整理了底层抽象。</p>
+<h3 id="agent-不再依赖单一-kernel-中心"><a class="markdownIt-Anchor" href="#agent-不再依赖单一-kernel-中心"></a> Agent 不再依赖单一 Kernel 中心</h3>
+<p>在 Semantic Kernel 里，Kernel 是中心。模型、插件、服务都挂在 Kernel 上。</p>
+<p>而 MAF 更偏向直接的 Agent 抽象：</p>
+<p>Chat Client -&gt; Agent -&gt; Run</p>
+<p>也就是说，你先有一个模型客户端，比如 Azure OpenAI、OpenAI、Foundry、Anthropic，然后把它包装成 Agent，再给 Agent 配置 instructions、tools、session、middleware。</p>
+<p>这让结构更清晰：</p>
+<p>Provider 提供模型能力<br />
+Chat Client 负责和模型通信<br />
+Agent 负责组织任务执行<br />
+Tool 提供外部行动能力<br />
+Session 保存上下文<br />
+Workflow 负责编排多个执行单元</p>
+<h3 id="工具调用仍然是-agent-行动的核心"><a class="markdownIt-Anchor" href="#工具调用仍然是-agent-行动的核心"></a> 工具调用仍然是 Agent 行动的核心</h3>
+<p>MAF 里的 Tool，本质上继承了 SK 的 function calling 思想。</p>
+<p>执行流程依然是：</p>
+<p>用户输入<br />
+-&gt; Agent 构造上下文<br />
+-&gt; 模型判断是否需要工具<br />
+-&gt; 返回结构化工具调用<br />
+-&gt; 框架执行工具<br />
+-&gt; 工具结果回填上下文<br />
+-&gt; 模型继续判断或生成最终答案</p>
+<p>区别在于 MAF 把 Tool 表达得更统一。无论工具来自：</p>
+<ul>
+<li>本地函数</li>
+<li>OpenAPI</li>
+<li>MCP Server</li>
+<li>File Search</li>
+<li>Web Search</li>
+<li>Code Interpreter</li>
+<li>另一个 Agent</li>
+</ul>
+<p>都可以被 Agent 作为能力使用。</p>
+<p>甚至一个 Agent 可以被包装成另一个 Agent 的 Tool。这意味着可以形成层级结构：</p>
+<p>主 Agent<br />
+-&gt; 天气 Agent 工具<br />
+-&gt; 财务 Agent 工具<br />
+-&gt; 搜索 Agent 工具</p>
+<h3 id="session-和-context-provider-管理记忆"><a class="markdownIt-Anchor" href="#session-和-context-provider-管理记忆"></a> Session 和 Context Provider 管理“记忆”</h3>
+<p>Agent 看起来会记住上下文，其实不是模型自己永久记住了，而是框架在每次调用时把相关上下文重新组织后发给模型。</p>
+<p>MAF 中常见流程是：</p>
+<ol>
+<li>创建 AgentSession</li>
+<li>用户发起一轮请求</li>
+<li>Context Provider 注入相关信息</li>
+<li>History Provider 加载历史消息</li>
+<li>Agent 调用模型和工具</li>
+<li>执行结束后更新 Session 状态</li>
+<li>下一轮继续使用同一个 Session</li>
+</ol>
+<p>这里有几个关键概念：</p>
+<ul>
+<li>Session：当前任务或对话的状态容器。</li>
+<li>History：历史消息。</li>
+<li>Context Provider：负责注入额外上下文，比如用户偏好、检索结果、长期记忆。</li>
+<li>Persistence：把 Session 或历史保存到内存之外，方便恢复。</li>
+</ul>
+<p>所以 Agent 的“记忆”本质上是：</p>
+<p>存储系统 + 检索逻辑 + 上下文注入</p>
+<h3 id="workflow-解决可控编排"><a class="markdownIt-Anchor" href="#workflow-解决可控编排"></a> Workflow 解决可控编排</h3>
+<p>AutoGen 强调多 Agent 对话，但企业流程经常需要更确定的路径。MAF 因此提供 Workflow。</p>
+<p>Workflow 是图结构：</p>
+<p>Executor A -&gt; Executor B -&gt; Executor C</p>
+<p>其中：</p>
+<ul>
+<li>Executor 是执行节点，可以是函数，也可以是 Agent。</li>
+<li>Edge 是连接线，决定数据从哪里流向哪里。</li>
+<li>WorkflowBuilder 用来构建图。</li>
+<li>Checkpoint 用来保存中间状态。</li>
+<li>Event 用来观察执行过程。</li>
+</ul>
+<p>如果 Agent 是“让模型动态决定下一步”，Workflow 就是“开发者明确规定流程”。</p>
+<p>例如报销审批：</p>
+<p>读取报销单<br />
+-&gt; 检查发票<br />
+-&gt; 风险评分<br />
+-&gt; 高风险请求人工审批<br />
+-&gt; 低风险自动通过<br />
+-&gt; 生成结果</p>
+<p>这个流程不应该完全交给 LLM 自由发挥。应该用 Workflow 明确控制，而在某些节点中调用 Agent 做非结构化分析。</p>
+<p>这就是 MAF 很重要的设计哲学：</p>
+<p>能用确定性代码解决的，不要交给 Agent；需要语言理解和开放推理的，再交给 Agent。</p>
+<h3 id="superstep-让并发更可控"><a class="markdownIt-Anchor" href="#superstep-让并发更可控"></a> Superstep 让并发更可控</h3>
+<p>MAF Workflow 文档提到一种类似 Pregel / BSP 的 superstep 执行模型。</p>
+<p>第 N 轮：<br />
+收集所有待处理消息<br />
+根据边路由到目标 Executor<br />
+并发执行这些 Executor<br />
+等待全部完成<br />
+把新消息放入下一轮</p>
+<p>第 N+1 轮：<br />
+继续处理</p>
+<p>这和普通异步任务不同。它在每一轮之间设置同步点。</p>
+<p>好处是：</p>
+<ul>
+<li>执行顺序更确定</li>
+<li>并发行为更容易推理</li>
+<li>Checkpoint 更可靠</li>
+<li>出错后更容易恢复</li>
+</ul>
+<p>代价是：某些并发路径可能会互相等待。因此设计 Workflow 时，要避免把可以合并的连续小步骤拆得太碎。</p>
+<h2 id="maf-如何融合-autogen-和-semantic-kernel"><a class="markdownIt-Anchor" href="#maf-如何融合-autogen-和-semantic-kernel"></a> MAF 如何融合 AutoGen 和 Semantic Kernel</h2>
+<p>可以用一张逻辑表理解：</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>原有能力</th>
+<th>在 MAF 中的体现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AutoGen</td>
+<td>多 Agent 对话</td>
+<td>Agent orchestration</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td>Actor / event-driven 思想</td>
+<td>消息、事件、异步执行</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td>GroupChat、handoff、concurrent</td>
+<td>多 Agent 编排模式</td>
+</tr>
+<tr>
+<td>Semantic Kernel</td>
+<td>Kernel + Plugin</td>
+<td>Agent + Tool</td>
+</tr>
+<tr>
+<td>Semantic Kernel</td>
+<td>Function calling loop</td>
+<td>Tool invocation loop</td>
+</tr>
+<tr>
+<td>Semantic Kernel</td>
+<td>Memory / Vector Store</td>
+<td>Context Provider / History Provider</td>
+</tr>
+<tr>
+<td>Semantic Kernel</td>
+<td>Filters / Observability</td>
+<td>Middleware / Telemetry</td>
+</tr>
+<tr>
+<td>Semantic Kernel</td>
+<td>企业集成</td>
+<td>Foundry、Azure OpenAI、MCP、OpenAPI、A2A</td>
+</tr>
+</tbody>
+</table>
+<p>MAF 的合并不是把两个框架简单拼接，而是把共同底层抽象统一成：</p>
+<p>消息输入<br />
+-&gt; Agent 或 Workflow 处理<br />
+-&gt; 模型调用<br />
+-&gt; 工具调用<br />
+-&gt; 状态更新<br />
+-&gt; 事件输出<br />
+-&gt; 可观测和可恢复</p>
+<h1 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h1>
+<hr />
+<ol>
+<li>Microsoft Agent Framework 官方文档 (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/agent-framework/overview/">https://learn.microsoft.com/en-us/agent-framework/overview/</a>)</li>
+<li>Microsoft Agent Framework GitHub (<a target="_blank" rel="noopener" href="https://github.com/microsoft/agent-framework">https://github.com/microsoft/agent-framework</a>)</li>
+<li>MAF 发布博客 (<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/foundry/introducing-microsoft-agent-framework-the-open-source-engine-for-agentic-ai-apps/">https://devblogs.microsoft.com/foundry/introducing-microsoft-agent-framework-the-open-source-engine-for-agentic-ai-apps/</a>)</li>
+<li>AutoGen 论文页 (<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/publication/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-framework/">https://www.microsoft.com/en-us/research/publication/autogen-enabling-next-gen-llm-applications-via-multi-agent-conversation-framework/</a>)</li>
+<li>AutoGen v0.4 架构说明 (<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/">https://www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/</a>)</li>
+<li>Semantic Kernel 文档 (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/semantic-kernel/">https://learn.microsoft.com/en-us/semantic-kernel/</a>)</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI-agent/">AI agent</a></div><div class="post-share"><div class="social-share" data-image="/img/Schierke.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css?v=1.1.6" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js?v=1.1.6" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/20/%E8%AF%81%E6%98%8E,%E8%AE%BA%E8%AF%81%E4%B8%8E%E9%9B%B6%E7%9F%A5%E8%AF%86(%E4%B8%80)/" title="证明,论证与零知识(一)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">证明,论证与零知识(一)</div></div><div class="info-2"><div class="info-item-1"> 指纹与 Freivalds 算法   背景 考虑 Alice 和 Bob 两方，他们相互信任、共同为某个函数提供输入并合作计算。 假设Alice 和 Bob 各有一份长度为 nnn 的文件,字符集大小 mmm(比如 ASCII 就是 128),他们想确认两份文件是否一字不差。 最笨的做法是 Alice 把整份文件传给 Bob,通信量 nlog⁡mn \log mnlogm 比特。没有任何确定性过程可以发送比这个简单解决方案更少的信息。 但如果允许出错——比如允许有 0.00010.00010.0001 的概率给出错误答案——通信量可以降低到指数级别,变成 O(log⁡n)O(\log n)O(logn) 比特。 这个对比构成了本章的主题:用随机性 + 微小错误概率,换巨大的效率收益。  一个值得思考的角度:零知识证明里的&quot;概率可靠性&quot;,本质上就是同一种取舍——我们不需要绝对的确定性,只要错误概率足够小,实践中和&quot;不可能&quot;没区别。   Reed-Solomon 指纹 固定一个素数 p≥max⁡{m,n2}p \geq \max\{m, n^...</div></div></div></a><a class="pagination-related" href="/2026/05/13/%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F/" title="agent经典范式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">agent经典范式</div></div><div class="info-2"><div class="info-item-1">本文将介绍以下三种agent范式:  ReAct(Reasoning and Acting)： 一种将“思考”和“行动”紧密结合的范式，让智能体边想边做，动态调整。  2.Plan-and-Solve： 智能体首先生成一个完整的行动计划，然后严格执行。 3.Reflection： 一种赋予智能体“反思”能力的范式，通过自我批判和修正来优化结果。  ReAct  ReAct的核心思想是模仿人类解决问题的方式，将推理 (Reasoning) 与行动 (Acting) 显式地结合起来，形成一个“思考-行动-观察”的循环。 ReAct通过一种特殊的提示工程来引导模型，使模型每一步的输出都遵循固定的轨迹。   思考(Thought)：智能体分析任务，分解任务，制定下一步计划，或反思上一步的成果。   行动(Action)：智能体采取的具体行动，通常是调用一个工具。   观察(Observation)：执行Action后从外部工具返回的结果，例如搜索结果的摘要或API的返回值。   智能体将不断重复这个 Thought -&gt; Action -&gt; Observation 的循环，将...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/12/%E5%88%9D%E8%AF%86%E6%99%BA%E8%83%BD%E4%BD%93/" title="初识agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">初识agent</div></div><div class="info-2"><div class="info-item-1"> 什么是agent  agent被定义为通过传感器(Sensor)获取环境(Environment)信息，并自主地通过执行器(Actuators)采取行动(Action)来达成特定目标的实体。 LLM的出现让agent从过去的“按规则执行任务的程序”变为了更接近“能理解目标，分解任务，调用工具，持续修正”的智能系统。 AI agent相较传统agent有如下改变：   从规则驱动变成语言驱动 传统 agent 往往依赖手写规则、状态机、固定流程。 LLM 出现后，用户可以用自然语言给目标，agent 能理解意图、上下文和约束，再决定怎么行动。   具备通用推理与规划能力 过去的 agent 通常只能处理特定任务。 LLM 让 agent 能做任务拆解，比如“调研一个市场”可以被拆成搜索资料、比较信息、总结结论、生成报告等步骤。   工具调用成为核心能力 LLM 本身只是“脑”，但 agent 可以接上浏览器、代码解释器、数据库、API、文件系统、办公软件等工具。 这让 agent 不只是回答问题，而是能实际执行任务。   记忆和上下文管理变得重要 LLM agent 可以保存用户...</div></div></div></a><a class="pagination-related" href="/2026/05/13/%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F/" title="agent经典范式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-13</div><div class="info-item-2">agent经典范式</div></div><div class="info-2"><div class="info-item-1">本文将介绍以下三种agent范式:  ReAct(Reasoning and Acting)： 一种将“思考”和“行动”紧密结合的范式，让智能体边想边做，动态调整。  2.Plan-and-Solve： 智能体首先生成一个完整的行动计划，然后严格执行。 3.Reflection： 一种赋予智能体“反思”能力的范式，通过自我批判和修正来优化结果。  ReAct  ReAct的核心思想是模仿人类解决问题的方式，将推理 (Reasoning) 与行动 (Acting) 显式地结合起来，形成一个“思考-行动-观察”的循环。 ReAct通过一种特殊的提示工程来引导模型，使模型每一步的输出都遵循固定的轨迹。   思考(Thought)：智能体分析任务，分解任务，制定下一步计划，或反思上一步的成果。   行动(Action)：智能体采取的具体行动，通常是调用一个工具。   观察(Observation)：执行Action后从外部工具返回的结果，例如搜索结果的摘要或API的返回值。   智能体将不断重复这个 Thought -&gt; Action -&gt; Observation 的循环，将...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/Schierke.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Schie2ke</div><div class="author-info-description">AI，密码学</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Schie2ke"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#microsoft-agent-framework"><span class="toc-number">1.</span> <span class="toc-text"> Microsoft Agent Framework</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#autogen"><span class="toc-number">1.1.</span> <span class="toc-text"> AutoGen</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#autogen-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%A4%9A-agent-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text"> AutoGen 的底层原理：消息驱动的多 Agent 系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#autogen-%E7%9A%84%E4%BC%98%E5%8A%BF%E5%92%8C%E5%B1%80%E9%99%90"><span class="toc-number">1.1.2.</span> <span class="toc-text"> AutoGen 的优势和局限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#semantic-kernel"><span class="toc-number">1.2.</span> <span class="toc-text"> Semantic Kernel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#semantic-kernel-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E5%BE%AA%E7%8E%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text"> Semantic Kernel 的底层原理：函数调用循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin-function-tool-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text"> Plugin、Function、Tool 的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#semantic-kernel-%E7%9A%84%E5%B7%A5%E7%A8%8B%E4%BB%B7%E5%80%BC"><span class="toc-number">1.2.3.</span> <span class="toc-text"> Semantic Kernel 的工程价值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-autogen-%E5%92%8C-semantic-kernel-%E9%9C%80%E8%A6%81%E7%BB%93%E5%90%88"><span class="toc-number">1.3.</span> <span class="toc-text"> 为什么 AutoGen 和 Semantic Kernel 需要结合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maf"><span class="toc-number">1.4.</span> <span class="toc-text"> MAF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#agent-%E4%B8%8D%E5%86%8D%E4%BE%9D%E8%B5%96%E5%8D%95%E4%B8%80-kernel-%E4%B8%AD%E5%BF%83"><span class="toc-number">1.4.1.</span> <span class="toc-text"> Agent 不再依赖单一 Kernel 中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E4%BB%8D%E7%84%B6%E6%98%AF-agent-%E8%A1%8C%E5%8A%A8%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 工具调用仍然是 Agent 行动的核心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#session-%E5%92%8C-context-provider-%E7%AE%A1%E7%90%86%E8%AE%B0%E5%BF%86"><span class="toc-number">1.4.3.</span> <span class="toc-text"> Session 和 Context Provider 管理“记忆”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#workflow-%E8%A7%A3%E5%86%B3%E5%8F%AF%E6%8E%A7%E7%BC%96%E6%8E%92"><span class="toc-number">1.4.4.</span> <span class="toc-text"> Workflow 解决可控编排</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#superstep-%E8%AE%A9%E5%B9%B6%E5%8F%91%E6%9B%B4%E5%8F%AF%E6%8E%A7"><span class="toc-number">1.4.5.</span> <span class="toc-text"> Superstep 让并发更可控</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maf-%E5%A6%82%E4%BD%95%E8%9E%8D%E5%90%88-autogen-%E5%92%8C-semantic-kernel"><span class="toc-number">1.5.</span> <span class="toc-text"> MAF 如何融合 AutoGen 和 Semantic Kernel</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text"> 参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/28/makefile/" title="Makefile">Makefile</a><time datetime="2026-06-27T16:00:00.000Z" title="发表于 2026-06-28 00:00:00">2026-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/20/%E8%AF%81%E6%98%8E,%E8%AE%BA%E8%AF%81%E4%B8%8E%E9%9B%B6%E7%9F%A5%E8%AF%86(%E4%B8%80)/" title="证明,论证与零知识(一)">证明,论证与零知识(一)</a><time datetime="2026-05-20T13:00:00.000Z" title="发表于 2026-05-20 21:00:00">2026-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/17/%E4%B8%BB%E6%B5%81%E6%99%BA%E8%83%BD%E4%BD%93%E6%A1%86%E6%9E%B6/" title="主流智能体框架（一）">主流智能体框架（一）</a><time datetime="2026-05-17T05:38:42.000Z" title="发表于 2026-05-17 13:38:42">2026-05-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/13/%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F/" title="agent经典范式">agent经典范式</a><time datetime="2026-05-13T06:42:49.000Z" title="发表于 2026-05-13 14:42:49">2026-05-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/12/%E5%88%9D%E8%AF%86%E6%99%BA%E8%83%BD%E4%BD%93/" title="初识agent">初识agent</a><time datetime="2026-05-12T05:30:44.000Z" title="发表于 2026-05-12 13:30:44">2026-05-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Schie2ke</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('/pluginsSrc/katex/dist/katex.min.css?v=0.16.28')
+    if (false) {
+      await btf.getScript('/pluginsSrc/katex/dist/contrib/copy-tex.min.js?v=0.16.28')
+    }
+  }
+
+  showKatex()
+})()</script></div><script defer src="/js/sakura.min.js"></script><script defer src="/js/sakura-init.js"></script><script defer src="/js/schierke.js"></script><script id="click-heart" src="/pluginsSrc/butterfly-extsrc/dist/click-heart.min.js?v=1.1.6" async="async" mobile="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

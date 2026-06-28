@@ -1,0 +1,184 @@
+/* ==================== 二次元风 自定义样式 ==================== */
+/* Schierke的Blog - 营柔蒝紫主题 */
+
+/* 引入霞鹜文楷字体 - 本地化（仅 Regular 字重） */
+/* @import url('/css/lxgw/style.css'); */  /* 临时禁用,排查字母不显示 */
+
+:root {
+  --pink: #ff7eb9;
+  --pink-light: #ffd1dc;
+  --purple: #7e57c2;
+  --purple-light: #b39ddb;
+  --purple-soft: #ede7f6;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-dark: rgba(30, 20, 50, 0.72);
+}
+
+/* 全站字体 */
+body {
+  /* font-family: 'LXGW WenKai', 'PingFang SC', 'Microsoft YaHei', sans-serif !important; */  /* 临时禁用 */
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+}
+
+/* ==================== 渐变背景 ==================== */
+#web_bg {
+  background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%) !important;
+  background-attachment: fixed;
+}
+[data-theme='dark'] #web_bg {
+  background: linear-gradient(135deg, #1a0e2e 0%, #2a1640 50%, #1a1428 100%) !important;
+}
+
+/* ==================== 顶部导航 半透明毛玻璃 ==================== */
+#page-header.nav-fixed #nav,
+#page-header.not-top-img #nav {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  box-shadow: 0 4px 20px rgba(126, 87, 194, 0.08);
+}
+[data-theme='dark'] #page-header.nav-fixed #nav,
+[data-theme='dark'] #page-header.not-top-img #nav {
+  background: var(--glass-bg-dark) !important;
+}
+
+/* ==================== 卡片圆角 + 半透明 + 阴影 ==================== */
+.layout > div:first-child:not(.recent-posts),
+.layout > .recent-posts,
+#aside-content .card-widget,
+#post,
+#page,
+#archive,
+.note {
+  border-radius: 18px !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 24px rgba(126, 87, 194, 0.08), 0 1px 3px rgba(126, 87, 194, 0.04) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+[data-theme='dark'] .layout > div:first-child:not(.recent-posts),
+[data-theme='dark'] .layout > .recent-posts,
+[data-theme='dark'] #aside-content .card-widget,
+[data-theme='dark'] #post,
+[data-theme='dark'] #page,
+[data-theme='dark'] #archive {
+  background: var(--glass-bg-dark) !important;
+}
+
+/* 文章卡片 hover 微浮起 */
+.recent-post-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(255, 126, 185, 0.18) !important;
+}
+
+.recent-post-item {
+  border-radius: 18px !important;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== 头像加柔和发光 ==================== */
+#aside-content .avatar-img,
+#sidebar .avatar-img img {
+  box-shadow: 0 0 20px rgba(255, 126, 185, 0.4),
+              0 0 40px rgba(126, 87, 194, 0.2);
+  border-radius: 50%;
+  transition: transform 0.5s ease;
+}
+#aside-content .avatar-img:hover {
+  transform: rotate(360deg) scale(1.05);
+}
+
+/* ==================== 站点标题 渐变文字 ==================== */
+#site-title,
+.site-name,
+#site-subtitle {
+  background: linear-gradient(135deg, #ff7eb9 0%, #7e57c2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* ==================== 自定义可爱滚动条 ==================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #ff7eb9, #7e57c2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ff5ba7, #6a3eb5);
+}
+
+/* ==================== 链接 hover 下划线动画 ==================== */
+#article-container a:not(.headerlink, .no-underline) {
+  background-image: linear-gradient(90deg, var(--pink), var(--purple));
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+  text-decoration: none !important;
+}
+#article-container a:not(.headerlink, .no-underline):hover {
+  background-size: 100% 2px;
+}
+
+/* ==================== 按钮粉色调 ==================== */
+.button--animated, button, .btn-shadow {
+  background: linear-gradient(135deg, var(--pink), var(--purple)) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* ==================== 公告/标签 可爱小标识 ==================== */
+.card-announcement .item-headline i,
+.card-recent-post .item-headline i,
+.card-categories .item-headline i,
+.card-tags .item-headline i {
+  color: var(--pink) !important;
+}
+
+/* ==================== Live2D 容器位置微调 ==================== */
+#live2d-widget {
+  z-index: 999 !important;
+}
+@media (max-width: 768px) {
+  #live2d-widget { display: none !important; }
+}
+
+/* ==================== 代码块 圆角 + 紫色边框 ==================== */
+#article-container figure.highlight,
+#article-container pre {
+  border-radius: 12px !important;
+  border-left: 3px solid var(--purple) !important;
+}
+
+/* ==================== 引用块 ==================== */
+#article-container blockquote {
+  border-left: 4px solid var(--pink) !important;
+  background: rgba(255, 209, 220, 0.15) !important;
+  border-radius: 8px;
+}
+
+/* ==================== 文章 meta 图标粉色 ==================== */
+.post-meta-date i,
+.article-meta i {
+  color: var(--pink);
+}
+
+/* ==================== 鼠标点击爱心特效 颜色定制 ==================== */
+.heart {
+  color: var(--pink) !important;
+}
+
+#article-container {
+    font-size: 17px !important;
+    line-height: 1.9;
+  }

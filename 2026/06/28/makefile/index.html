@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Makefile | Schierke的Blog</title><meta name="author" content="Schie2ke"><meta name="copyright" content="Schie2ke"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f3e5f5"><meta name="description" content="Makefile简介  ‘Makefile’ 是 ‘make’ 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。 它最早出现在 Unix&#x2F;C 语言开发环境中，核心目的是自动化编译和增量构建。 ‘Makefile’ 常用于： 编译 C&#x2F;C++ 项目 链接可执行文件或库 自动运行测试 清理构建产物 打包、安装、部署 统一项目里的常用命令   Makefile">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Makefile | Schierke的Blog</title><meta name="author" content="Schie2ke"><meta name="copyright" content="Schie2ke"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f3e5f5"><meta name="description" content="Makefile简介  Makefile 是 make 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。 它最早出现在 Unix&#x2F;C 语言开发环境中，核心目的是自动化编译和增量构建。 Makefile 常用于： 编译 C&#x2F;C++ 项目 链接可执行文件或库 自动运行测试 清理构建产物 打包、安装、部署 统一项目里的常用命令   Makefile基础   基">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Makefile">
 <meta property="og:url" content="https://schie2ke.github.io/2026/06/28/makefile/index.html">
 <meta property="og:site_name" content="Schierke的Blog">
-<meta property="og:description" content="Makefile简介  ‘Makefile’ 是 ‘make’ 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。 它最早出现在 Unix&#x2F;C 语言开发环境中，核心目的是自动化编译和增量构建。 ‘Makefile’ 常用于： 编译 C&#x2F;C++ 项目 链接可执行文件或库 自动运行测试 清理构建产物 打包、安装、部署 统一项目里的常用命令   Makefile">
+<meta property="og:description" content="Makefile简介  Makefile 是 make 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。 它最早出现在 Unix&#x2F;C 语言开发环境中，核心目的是自动化编译和增量构建。 Makefile 常用于： 编译 C&#x2F;C++ 项目 链接可执行文件或库 自动运行测试 清理构建产物 打包、安装、部署 统一项目里的常用命令   Makefile基础   基">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://schie2ke.github.io/img/Schierke.png">
 <meta property="article:published_time" content="2026-06-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-28T08:42:05.474Z">
+<meta property="article:modified_time" content="2026-06-28T08:48:16.710Z">
 <meta property="article:author" content="Schie2ke">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://schie2ke.github.io/2026/06/28/makefile/",
   "image": "https://schie2ke.github.io/img/Schierke.png",
   "datePublished": "2026-06-27T16:00:00.000Z",
-  "dateModified": "2026-06-28T08:42:05.474Z",
+  "dateModified": "2026-06-28T08:48:16.710Z",
   "author": [
     {
       "@type": "Person",
@@ -159,11 +159,11 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/schierke.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Schierke.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Schierke的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Makefile</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Makefile</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-27T16:00:00.000Z" title="发表于 2026-06-28 00:00:00">2026-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-28T08:42:05.474Z" title="更新于 2026-06-28 16:42:05">2026-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="makefile简介"><a class="markdownIt-Anchor" href="#makefile简介"></a> Makefile简介</h1>
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/schierke.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/Schierke.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Schierke的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Makefile</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Makefile</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-27T16:00:00.000Z" title="发表于 2026-06-28 00:00:00">2026-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-28T08:48:16.710Z" title="更新于 2026-06-28 16:48:16">2026-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="makefile简介"><a class="markdownIt-Anchor" href="#makefile简介"></a> Makefile简介</h1>
 <hr />
-<p>‘Makefile’ 是 ‘make’ 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。<br />
+<p><code>Makefile</code> 是 <code>make</code> 工具读取的构建脚本文件，主要用于描述“哪些文件依赖哪些文件，以及如何从依赖生成目标文件”。<br />
 它最早出现在 Unix/C 语言开发环境中，核心目的是自动化编译和增量构建。</p>
-<p>‘Makefile’ 常用于：</p>
+<p><code>Makefile</code> 常用于：</p>
 <pre><code>编译 C/C++ 项目
 链接可执行文件或库
 自动运行测试
@@ -174,8 +174,8 @@
 <h1 id="makefile基础"><a class="markdownIt-Anchor" href="#makefile基础"></a> Makefile基础</h1>
 <hr />
 <h2 id="基础格式"><a class="markdownIt-Anchor" href="#基础格式"></a> 基础格式</h2>
-<p>在Linux环境下，当我们输入’make’命令时，它就在当前目录查找一个名为’Makefile’的文件，然后，根据这个文件定义的规则，自动化地执行任意命令，包括编译命令。</p>
-<p>'Makefile’文件的基本格式:</p>
+<p>在Linux环境下，当我们输入<code>make</code>命令时，它就在当前目录查找一个名为<code>Makefile</code>的文件，然后，根据这个文件定义的规则，自动化地执行任意命令，包括编译命令。</p>
+<p><code>Makefile</code>文件的基本格式:</p>
 <pre><code>target: dependencies
     command
 </code></pre>
@@ -185,7 +185,7 @@
     main.c
     Makefile
 </code></pre>
-<p>‘main.h’</p>
+<p><code>main.h</code></p>
 <pre><code>#ifndef MAIN_H
 #define MAIN_H
 
@@ -193,7 +193,7 @@ void hello_world();
 
 #endif
 </code></pre>
-<p>‘main.c’</p>
+<p><code>main.c</code></p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &quot;main.h&quot;
 
@@ -206,10 +206,11 @@ int main() {
     return 0;
 }
 </code></pre>
-<p>‘Makefile’<br />
-CC = gcc<br />
-TARGET = 1.exe</p>
-<pre><code>$(TARGET): main.o
+<p><code>Makefile</code></p>
+<pre><code>CC = gcc
+TARGET = 1.exe
+
+$(TARGET): main.o
     $(CC) main.o -o $(TARGET)
 
 main.o: main.c main.h
@@ -228,12 +229,12 @@ $ make run
 ./1.exe
 Hello world!
 </code></pre>
-<p>'Makefile’定义了一系列规则，每个规则在满足依赖文件的前提下执行命令，就能创建出一个目标文件。<br />
+<p><code>Makefile</code>定义了一系列规则，每个规则在满足依赖文件的前提下执行命令，就能创建出一个目标文件。<br />
 把默认执行的规则放第一条，其他规则的顺序是无关紧要的，因为’make’执行时自动判断依赖。</p>
-<p>如果再次执行’make’，则输出如下:<br />
+<p>如果再次执行<code>make</code>，则输出如下:<br />
 $make<br />
 make: ‘1.exe’ is up to date.</p>
-<p>'make’检测到1.exe已经是最新版本，无需再次执行，因为1.exe的创建时间晚于它依赖的最后修改时间。</p>
+<p><code>make</code>检测到1.exe已经是最新版本，无需再次执行，因为1.exe的创建时间晚于它依赖的最后修改时间。</p>
 <h2 id="执行多条命令"><a class="markdownIt-Anchor" href="#执行多条命令"></a> 执行多条命令</h2>
 <p>一个规则可以有多条命令，例如：</p>
 <pre><code>cd:
@@ -249,12 +250,12 @@ cd ..
 pwd
 /home/ubuntu/makefile_example/v1
 </code></pre>
-<p>观察输出，发现’cd …'命令执行后，并未改变当前目录，两次输出的’pwd’是一样的，这是因为’make’针对每条命令，都会创建一个独立的’Shell’环境，类似’cd …'这样的命令，并不会影响当前目录。</p>
+<p>观察输出，发现<code>cd ..</code>命令执行后，并未改变当前目录，两次输出的<code>pwd</code>是一样的，这是因为<code>make</code>针对每条命令，都会创建一个独立的<code>Shell</code>环境，类似<code>cd ..</code>这样的命令，并不会影响当前目录。</p>
 <p>解决办法是把多条命令以;分隔，写到一行：</p>
 <pre><code>cd_ok:
     pwd; cd ..; pwd;
 </code></pre>
-<p>再执行cd_ok目标就得到了预期结果：</p>
+<p>再执行<code>cd_ok</code>目标就得到了预期结果：</p>
 <pre><code>$ make cd_ok
 pwd; cd ..; pwd
 /home/ubuntu/makefile_example/v1
@@ -271,8 +272,8 @@ pwd; cd ..; pwd
     cd .. &amp;&amp; pwd
 </code></pre>
 <h2 id="控制"><a class="markdownIt-Anchor" href="#控制"></a> 控制</h2>
-<p>默认情况下，'make’会打印出它执行的每一条命令。如果我们不想打印某一条命令，可以在命令前加上@，表示不打印命令（但是仍然会执行）</p>
-<p>make在执行命令时，会检查每一条命令的返回值，如果返回错误（非0值），就会中断执行。</p>
+<p>默认情况下，<code>make</code>会打印出它执行的每一条命令。如果我们不想打印某一条命令，可以在命令前加上@，表示不打印命令（但是仍然会执行）</p>
+<p><code>make</code>在执行命令时，会检查每一条命令的返回值，如果返回错误（非0值），就会中断执行。</p>
 <p>如删除不存在的文件<br />
 Makefile<br />
 has_error:<br />
